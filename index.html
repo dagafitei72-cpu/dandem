@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Agafiței — Developer & Digital Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00ff88;
+            --neon-blue: #00d4ff;
+            --neon-purple: #a855f7;
+            --dark-bg: #0a0a0f;
+            --card-bg: #12121a;
+            --card-border: #1e1e2e;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888a0;
+            --accent-glow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Circuit Board Background */
+        .circuit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
+        .circuit-bg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Scanline overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.08);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--neon-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-name .first {
+            display: block;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-name .last {
+            display: block;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            font-weight: 300;
+            color: var(--text-secondary);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-description {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.8s forwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 1s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2.2rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-green), #00cc6a);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 255, 136, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; animation-duration: 7s; }
+        .particle:nth-child(2) { top: 60%; left: 85%; animation-delay: 1s; animation-duration: 9s; }
+        .particle:nth-child(3) { top: 40%; left: 30%; animation-delay: 2s; animation-duration: 6s; }
+        .particle:nth-child(4) { top: 80%; left: 60%; animation-delay: 3s; animation-duration: 10s; }
+        .particle:nth-child(5) { top: 15%; left: 70%; animation-delay: 0.5s; animation-duration: 8s; }
+        .particle:nth-child(6) { top: 70%; left: 20%; animation-delay: 2.5s; animation-duration: 7s; }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-number {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-green), transparent);
+            margin: 1.2rem auto 0;
+        }
+
+        /* About Section */
+        .about-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text strong {
+            color: var(--neon-green);
+            font-weight: 500;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1.8rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: var(--accent-glow);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            margin-top: 0.3rem;
+        }
+
+        /* Skills Section */
+        .skills-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .skill-category {
+            margin-bottom: 3rem;
+        }
+
+        .skill-category-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--neon-green);
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--neon-green);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-item:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateX(4px);
+            box-shadow: -4px 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .skill-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .skill-item span {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), var(--accent-glow);
+        }
+
+        .project-header {
+            padding: 2rem 2rem 1rem;
+        }
+
+        .project-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-live .status-dot { background: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
+        .status-live { color: var(--neon-green); }
+
+        .status-dev .status-dot { background: #ffaa00; box-shadow: 0 0 8px #ffaa00; }
+        .status-dev { color: #ffaa00; }
+
+        .status-standby .status-dot { background: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
+        .status-standby { color: var(--neon-blue); }
+
+        .project-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.6rem;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding: 0 2rem;
+        }
+
+        .project-tech {
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 255, 136, 0.06);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 3px;
+            color: var(--neon-green);
+            letter-spacing: 0.5px;
+        }
+
+        /* Journey Section */
+        .journey-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--neon-green), transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 1rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.35rem;
+            top: 0.3rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+        }
+
+        .timeline-year {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-text {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.8rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: var(--accent-glow);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem 3rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-text {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+        }
+
+        .footer-text .heart {
+            color: var(--neon-green);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+            25% { transform: translateY(-20px) translateX(10px); opacity: 0.8; }
+            50% { transform: translateY(-10px) translateX(-10px); opacity: 0.3; }
+            75% { transform: translateY(-30px) translateX(5px); opacity: 0.6; }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.3); }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1.2rem;
+            }
+
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Circuit Background -->
+    <div class="circuit-bg">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+            <defs>
+                <pattern id="circuit" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                    <path d="M20 0 L20 80 L100 80" stroke="#00ff88" stroke-width="0.5" fill="none"/>
+                    <path d="M80 0 L80 40 L160 40 L160 120" stroke="#00ff88" stroke-width="0.5" fill="none"/>
+                    <path d="M140 0 L140 60 L200 60" stroke="#00ff88" stroke-width="0.5" fill="none"/>
+                    <path d="M0 140 L60 140 L60 200" stroke="#00ff88" stroke-width="0.5" fill="none"/>
+                    <path d="M120 120 L120 180 L200 180" stroke="#00ff88" stroke-width="0.5" fill="none"/>
+                    <circle cx="20" cy="80" r="2" fill="#00ff88"/>
+                    <circle cx="80" cy="40" r="2" fill="#00ff88"/>
+                    <circle cx="160" cy="40" r="2" fill="#00ff88"/>
+                    <circle cx="160" cy="120" r="2" fill="#00ff88"/>
+                    <circle cx="60" cy="140" r="2" fill="#00ff88"/>
+                    <circle cx="120" cy="180" r="2" fill="#00ff88"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#circuit)"/>
+        </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">DANDEM</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#journey">Journey</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="hero-content">
+            <div class="hero-tag">// full-stack developer & digital entrepreneur</div>
+            <h1 class="hero-name">
+                <span class="first">DANIEL</span>
+                <span class="last">AGAFIȚEI</span>
+            </h1>
+            <p class="hero-title">Building the Future, One Line at a Time</p>
+            <p class="hero-description">
+                Self-taught developer from Romania, based in Belgium. 
+                I build production-grade web applications, SaaS platforms, and enterprise solutions. 
+                Currently crafting the future of e-invoicing in Belgium.
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">→ View Projects</a>
+                <a href="#contact" class="btn btn-outline">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="section-header fade-in">
+            <span class="section-number">// 01</span>
+            <h2 class="section-title">WHO I AM</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="about-grid fade-in">
+            <div class="about-text">
+                <p>
+                    I'm <strong>Daniel Agafiței</strong> — a self-taught full-stack developer who learned to code 
+                    after 10-hour construction workdays. Hundreds of failed attempts never stopped me. 
+                    Every error was a lesson, every bug was fuel.
+                </p>
+                <p>
+                    Born in Romania, now based in Belgium, I combine relentless determination with 
+                    technical skill to build real-world software solutions. My hands have built roofs 
+                    across Belgium — now they build digital infrastructure.
+                </p>
+                <p>
+                    I believe in <strong>learning by doing</strong>, breaking things, and rebuilding them 
+                    better. No university, no bootcamp — just pure dedication, late nights, and the 
+                    refusal to accept limits.
+                </p>
+            </div>
+
+            <div class="about-stats">
+                <div class="stat-card">
+                    <div class="stat-number">8+</div>
+                    <div class="stat-label">Years Coding</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Projects Built</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Languages Spoken</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Determination</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="section-header fade-in">
+            <span class="section-number">// 02</span>
+            <h2 class="section-title">TECH STACK</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="skills-container fade-in">
+            <div class="skill-category">
+                <h3 class="skill-category-title">FRONTEND</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(227,79,38,0.15); color:#e34f26;">⟨⟩</div>
+                        <span>HTML5</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(38,77,228,0.15); color:#264de4;">✦</div>
+                        <span>CSS3</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(247,223,30,0.15); color:#f7df1e;">JS</div>
+                        <span>JavaScript</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(97,218,251,0.15); color:#61dafb;">⚛</div>
+                        <span>React</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(6,182,212,0.15); color:#06b6d4;">◎</div>
+                        <span>Tailwind CSS</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(255,255,255,0.08); color:#fff;">◐</div>
+                        <span>Responsive Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">BACKEND & SERVER</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(119,123,180,0.15); color:#777bb4;">⟐</div>
+                        <span>PHP</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(51,153,51,0.15); color:#339933;">⬡</div>
+                        <span>Node.js</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,153,0,0.15); color:#009900;">◉</div>
+                        <span>NGINX</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(206,78,0,0.15); color:#ce4e00;">▣</div>
+                        <span>Apache</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,136,204,0.15); color:#0088cc;">✉</div>
+                        <span>Postfix SMTP</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(168,100,253,0.15); color:#a864fd;">λ</div>
+                        <span>REST APIs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">DATABASE & INFRASTRUCTURE</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,116,143,0.15); color:#00748f;">◫</div>
+                        <span>MySQL</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,100,200,0.15); color:#0064c8;">⛁</div>
+                        <span>SQL</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(255,153,0,0.15); color:#ff9900;">☁</div>
+                        <span>GoDaddy VPS</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(240,80,50,0.15); color:#f05032;">⎇</div>
+                        <span>Git & GitHub</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,212,136,0.15); color:#00d488;">⊞</div>
+                        <span>cPanel & WHM</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(230,80,80,0.15); color:#e65050;">⛨</div>
+                        <span>SSL & Security</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">BUSINESS & COMPLIANCE</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,200,100,0.15); color:#00c864;">⬢</div>
+                        <span>PEPPOL Network</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,100,255,0.15); color:#0064ff;">⊕</div>
+                        <span>UBL / E-Invoicing</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(255,180,0,0.15); color:#ffb400;">€</div>
+                        <span>Belgian VAT</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(255,100,100,0.15); color:#ff6464;">⚖</div>
+                        <span>GDPR Compliance</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(180,130,255,0.15); color:#b482ff;">⊙</div>
+                        <span>SaaS Architecture</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(0,180,180,0.15); color:#00b4b4;">◈</div>
+                        <span>i18n / Multi-lang</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">CREATIVE & AI</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(255,120,50,0.15); color:#ff7832;">◎</div>
+                        <span>Blender 3D</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(168,85,247,0.15); color:#a855f7;">✧</div>
+                        <span>AI Integration</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(236,72,153,0.15); color:#ec4899;">♪</div>
+                        <span>Suno AI Music</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon" style="background:rgba(16,185,129,0.15); color:#10b981;">⟁</div>
+                        <span>DALL·E / Stability</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="section-header fade-in">
+            <span class="section-number">// 03</span>
+            <h2 class="section-title">PROJECTS</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="projects-grid fade-in">
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-status status-dev">
+                        <span class="status-dot"></span>
+                        IN DEVELOPMENT
+                    </div>
+                    <h3 class="project-name">Demfact.be</h3>
+                </div>
+                <p class="project-desc">
+                    PEPPOL-compliant e-invoicing SaaS platform built for Belgium's 2026 
+                    mandatory e-invoicing transition. Features 10 specialized invoice generators 
+                    for different Belgian industries, multi-language support (FR/NL/EN/RO), 
+                    enterprise-grade security, and full Belgian VAT compliance.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">PHP</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">PEPPOL</span>
+                    <span class="tech-tag">UBL</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">REST API</span>
+                    <span class="tech-tag">i18n</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-status status-standby">
+                        <span class="status-dot"></span>
+                        STANDBY
+                    </div>
+                    <h3 class="project-name">Dandemartai</h3>
+                </div>
+                <p class="project-desc">
+                    AI-powered image generation platform integrating DALL·E 3 and 
+                    Stability AI APIs. Allows users to generate, customize, and 
+                    download AI artwork through an intuitive web interface.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">DALL·E 3</span>
+                    <span class="tech-tag">Stability AI</span>
+                    <span class="tech-tag">PHP</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">API Integration</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-status status-live">
+                        <span class="status-dot"></span>
+                        LIVE
+                    </div>
+                    <h3 class="project-name">AC-Home</h3>
+                </div>
+                <p class="project-desc">
+                    Professional website for a Belgian home services company covering 
+                    electrical, plumbing, and renovation services. Clean design with 
+                    service showcase, contact integration, and mobile optimization.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">HTML5</span>
+                    <span class="tech-tag">CSS3</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">GitHub Pages</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-status status-standby">
+                        <span class="status-dot"></span>
+                        ARCHIVED
+                    </div>
+                    <h3 class="project-name">Metin2 Server</h3>
+                </div>
+                <p class="project-desc">
+                    Custom private Metin2 game server with full server infrastructure, 
+                    database management, custom configurations, and community features. 
+                    A deep dive into server administration and game systems.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Server Admin</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">Networking</span>
+                    <span class="tech-tag">Linux</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section id="journey">
+        <div class="section-header fade-in">
+            <span class="section-number">// 04</span>
+            <h2 class="section-title">MY JOURNEY</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="journey-container fade-in">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">THE BEGINNING</div>
+                    <div class="timeline-title">From Romania to Belgium</div>
+                    <div class="timeline-desc">
+                        Grew up in rural Romania. Moved to Belgium and started working in construction — 
+                        roofing, hard physical labor, rain or shine. But the dream of building something 
+                        digital never faded.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year">THE GRIND</div>
+                    <div class="timeline-title">Learning to Code After Work</div>
+                    <div class="timeline-desc">
+                        After 8-10 hour construction days, I'd come home and teach myself programming. 
+                        Hundreds of failed attempts. No courses, no mentor — just raw determination 
+                        and a screen. Every error message was a teacher.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year">THE BUILD</div>
+                    <div class="timeline-title">First Real Projects</div>
+                    <div class="timeline-desc">
+                        Built Dandemartai, launched a Metin2 server, experimented with AI integrations. 
+                        Each project leveled up my skills from basic HTML to full-stack development, 
+                        database architecture, and server management.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year">NOW — 2026</div>
+                    <div class="timeline-title">Demfact.be & The Escape</div>
+                    <div class="timeline-desc">
+                        Building a PEPPOL-compliant e-invoicing platform for Belgium's mandatory 
+                        2026 transition. This is the project that changes everything — the bridge 
+                        from construction worker to tech entrepreneur.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year">THE FUTURE</div>
+                    <div class="timeline-title">No Limits</div>
+                    <div class="timeline-desc">
+                        The goal isn't just financial freedom — it's proof that anyone, from anywhere, 
+                        can build their way out through code, determination, and the refusal to quit. 
+                        This is just the beginning.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="section-header fade-in">
+            <span class="section-number">// 05</span>
+            <h2 class="section-title">LET'S CONNECT</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="contact-container fade-in">
+            <p class="contact-text">
+                Whether you need a web application built, want to discuss a collaboration, 
+                or just want to connect — I'm always open to new opportunities and conversations.
+            </p>
+            <div class="contact-links">
+                <a href="https://github.com/dagafitei72-cpu" class="contact-link" target="_blank">
+                    ⎇ GitHub
+                </a>
+                <a href="mailto:contact@dandem.be" class="contact-link">
+                    ✉ Email
+                </a>
+                <a href="https://demfact.be" class="contact-link" target="_blank">
+                    ⬢ Demfact.be
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">
+            Built with <span class="heart">♥</span> by Daniel Agafiței — © 2026 DANDEM
+        </p>
+    </footer>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth parallax on hero particles
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            particles.forEach((p, i) => {
+                const speed = (i + 1) * 0.5;
+                p.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
